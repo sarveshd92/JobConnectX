@@ -25,7 +25,7 @@ const NavBar = () => {
     <div className="h-16 w-full flex justify-between items-center px-8 bg-gray-100 box-border">
       <div className="flex items-center h-full">
         <h1 className="text-blue-600 font-bold text-2xl">
-          Job<span className="text-red-400">Portal</span>
+          Job<span className="text-red-400">ConnectX</span>
         </h1>
       </div>
       <div className="h-full flex items-center">

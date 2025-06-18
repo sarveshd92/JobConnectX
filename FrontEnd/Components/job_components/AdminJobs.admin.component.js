@@ -39,7 +39,7 @@ const AdminJobs = () => {
 
     const handleClickDelete = async (jobid) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/job/deletebyjobid/${jobid}`, {
+            const response = await axios.get(`http://localhost:7777/api/v1/job/deletebyjobid/${jobid}`, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

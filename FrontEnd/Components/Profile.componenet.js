@@ -98,7 +98,7 @@ const handleinputfile = (e) => {
     const fetchjobdata=async()=>{
 
         try {
-            const data=await axios.get("http://localhost:8000/api/v1/application/appliedjobs",{
+            const data=await axios.get("http://localhost:7777/api/v1/application/appliedjobs",{
                 withCredentials:true
             });
             // console.log("jobdata",data)

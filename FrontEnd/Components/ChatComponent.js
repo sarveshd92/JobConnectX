@@ -25,16 +25,17 @@ const [isTyping, setIsTyping] = useState(false);
    socketRef.current.on("user-typing", (data) => {
     
         setIsTyping(true);
-        // hide typing after 2 sec
+     
         setTimeout(() => setIsTyping(false), 2000);
   
     });
    
-    // ✅ Listen for incoming messages
-    socketRef.current.on('receive-message', (data) => {
-      
-      setMessages((prev) => [...prev, { content: data, sender: 'other' }]);
-    });
+
+  socketRef.current.on('receive-message', (data) => {
+    console.log(data)
+  setMessages((prev) => [...prev, data]);
+});
+
 
        
   
@@ -50,35 +51,25 @@ const [isTyping, setIsTyping] = useState(false);
   };
   // ✅ Send message
   const sendMessage = () => {
-    if (input.trim() === '') return;
+  if (input.trim() === '') return;
 
-    // Show your own message
-    setMessages((prev) => [...prev, { content: input, sender: 'you' }]);
-
-    // Emit to backend
-  //   room: jobApplicationId,  ✅ 
-  // content: messageText,   ✅ 
-  // senderId: recruiterOrUserId,    
-  // receiverId: otherPartyId,    recruiter
-console.log( roomId ,input,userid,recruiterId)
- socketRef.current.emit("send-message", {
-  room: roomId,
-      message: input,
-  senderId: userid,
-  receiverId: recruiterId,
-});
-    // socketRef.current.emit('send-message', {
-    //   room: roomId,
-    //   message: input,
-
-      
-    // });
-
-
-
-    setInput('');
+  const messageData = {
+    content: input,
+    senderId: userid,
+    receiverId: recruiterId,
+    room: roomId,
   };
 
+  // Show your own message immediately
+  setMessages((prev) => [...prev, messageData]);
+
+  // Emit to server
+  socketRef.current.emit("send-message", messageData);
+
+  setInput('');
+};
+
+console.log(recruiterId)
  return (
     <div className="max-w-md w-full mx-auto p-4 min-h-screen flex flex-col">
       <h3 className="text-2xl font-semibold mb-4 text-center">💬 Simple Chat</h3>
@@ -90,27 +81,26 @@ console.log( roomId ,input,userid,recruiterId)
  
       >
         {messages.length === 0 ? (
-          <p className="text-center text-gray-500">No messages yet.</p>
-        ) : (
-          messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`mb-2 flex ${
-                msg.senderId === userid ? "justify-end" : "justify-start"
-              }`}
-            >
-              <span
-                className={`inline-block px-4 py-2 max-w-xs break-words rounded-lg text-sm ${
-                  msg.senderId === userid
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-300 text-gray-900"
-                }`}
-              >
-                {msg.content}
-              </span>
-            </div>
-          ))
-        )}
+  <p className="text-center text-gray-500">No messages yet.</p>
+) : (
+  messages.map((msg, idx) => (
+    <div
+      key={idx}
+      className={`mb-2 flex ${msg.senderId === userid ? "justify-end" : "justify-start"}`}
+    >
+      <span
+        className={`inline-block px-4 py-2 max-w-xs break-words rounded-lg text-sm ${
+          msg.senderId === userid
+            ? "bg-blue-600 text-white"
+            : "bg-gray-300 text-gray-900"
+        }`}
+      >
+        {msg.content}
+      </span>
+    </div>
+  ))
+)}
+
       </div>
 
       {/* ✅ Input and button */}

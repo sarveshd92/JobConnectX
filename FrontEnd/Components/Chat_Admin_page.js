@@ -30,7 +30,8 @@ const ChatPage = () => {
 
     
         socketRef.current.on("receive-message", (data) => {
-            setMessages((prev) => [...prev, { content: data, sender: "other" }]);
+          console.log(data)
+            setMessages((prev) => [...prev, data]);
         });
 
        
@@ -49,22 +50,21 @@ const ChatPage = () => {
     const sendMessage = () => {
         if (input.trim() === "") return;
 
-        // socketRef.current.emit("send-message", {
-        //     room: userid,
-        //     message: input,
-        // });
-        console.log(userid,input+"sender"+userid)
-         socketRef.current.emit("send-message", {
-  room: userid,
-      message: input,
+     const messageObj = {
+  content: input,
   senderId: "",
-  receiverId: userid,
+  receiverId: userid, // You can fix this if needed
+};
+
+socketRef.current.emit("send-message", {
+  ...messageObj,
+  room: userid,
 });
 
-        setMessages((prev) => [...prev, { content: input, sender: "you" }]);
+setMessages((prev) => [...prev, messageObj]);
         setInput("");
     };
-
+console.log("USERID",userid)
    return (
     <div className="max-w-md w-full mx-auto p-4 min-h-screen flex flex-col">
       <h3 className="text-2xl font-semibold mb-4 text-center">💬 Simple Chat</h3>
@@ -82,14 +82,14 @@ const ChatPage = () => {
             <div
               key={idx}
               className={`mb-2 flex ${
-                msg.senderId === userid ? "justify-end" : "justify-start"
+                msg.senderId === userid ? "justify-start" : "justify-end"
               }`}
             >
               <span
                 className={`inline-block px-4 py-2 max-w-xs break-words rounded-lg text-sm ${
                   msg.senderId === userid
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-300 text-gray-900"
+                    ? "bg-gray-300 text-gray-900"  
+                    :  "bg-blue-600 text-white"
                 }`}
               >
                 {msg.content}

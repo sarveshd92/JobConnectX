@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
     try {
-        const { token } = req.cookies;
-
-        const decode = await jwt.verify(token, process.env.TOKENONE);
+        const { ref_token } = req.cookies;
+console.log("from auth ->",ref_token)
+        const decode = await jwt.verify(ref_token, process.env.TOKENONE);
         
         if (!decode) {
             return res.status(401).json({

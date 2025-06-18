@@ -15,8 +15,13 @@ import { Message } from "./models/Message.model.js";
 import { company } from "./models/company.model.js";
 import { job } from "./models/job.model.js";
 import { User } from "./models/user.model.js";
+import path from "path"
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 dotenv.config({
-  path: 'D:/Job Portal/JobHunt-Portal/BackEnd/.env' 
+  path: path.resolve(__dirname, '../.env')  
 });
 // console.log("heyy->>>",process.env)
 const app = express();
@@ -38,15 +43,18 @@ const server = http.createServer(app)
 const io=new Server(server,{
   cors:{origin:'http://localhost:1234',credentials:true,methods:['GET','PUT','POST']}
 })
-io.use( async(socket, next) => {
-  let token = socket.handshake.headers.cookie.split('token=');
-  token=token?.[1]
-  
-  const user = await jwt.verify(token,process.env.TOKENONE)
-  if (!user) return next(new Error("Unauthorized"));
-  socket.user = user;
-  next();
-});
+// io.use( async(socket, next) => {
+//   console.log(socket.handshake.headers)
+//   let token = socket.handshake.headers.cookie.split('refresh_token=');
+//   console.log(token)
+
+//   token=token?.[1]
+//   const user = await jwt.verify(token,process.env.TOKENONE)
+//   console.log("user->>",user)
+//   if (!user) return next(new Error("Unauthorized"));
+//   socket.user = user;
+//   next();
+// });
 io.on('connection', (socket) => {
   // console.log('User connected:', socket?.user?.userid);
 
@@ -57,20 +65,38 @@ io.on('connection', (socket) => {
   socket.emit("previous-messages", messages); // Send messages to user
 });
 
-  // socket.on('send-message', (data) => {
-    // const { room, message } = data;
-     socket.on("send-message", async ({ room, message, senderId, receiverId }) => {
+  
+     socket.on("send-message", async ({ room, content, senderId, receiverId }) => {
+      console.log( room, content, senderId, receiverId)
+     let decode="";
    if(senderId==""){
-   
-senderId= socket.user.userid
+    let refresh_token=socket?.handshake?.headers.cookie.split('ref_token=');
+       
+      console.log(refresh_token[1],process.env.TOKENONE)
+      try {
+         decode=jwt.verify(refresh_token[1],process.env.TOKENONE)
+      } catch (error) {
+        return res.status(401).ClearCookie("ref_token",{
+         httpOnly: true,
+      sameSite: 'Strict',
+      secure: true,
+        }).json({message:"Invalid cookie please login again"})
+      }
+      console.log(decode?.userid)
+senderId= decode?.userid
 
    }
      const saved = await Message.create({
-       room:room, content:message, senderId:senderId , receiverId: receiverId});
-    // console.log(`Message from ${socket.user.userid} to room ${room}:`, message);
+       room:room, content:content, senderId:senderId , receiverId: receiverId});
+    console.log(`Message from ${senderId} to room ${room}:`, content);
     
     // Send to others in the room
-    socket.to(room).emit('receive-message', message);
+    console.log(senderId,content,receiverId)
+    socket.to(room).emit('receive-message', {
+  content: content,
+  senderId,
+  receiverId
+});
   });
  socket.on('user-typing', (room) => {
     socket.to(room).emit('user-typing', room);

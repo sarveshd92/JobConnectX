@@ -1,44 +1,126 @@
-# JobHunt Portal
+# JobConnectX
 
-A production-ready full-stack Job Portal application built using the **MERN stack** with **real-time chat** support using **WebSockets**.
+**JobConnectX** is a full-featured job portal built with the MERN stack that connects recruiters and candidates seamlessly. Featuring real-time chat powered by **Socket.IO**, communication is activated when a recruiter selects a candidate’s resume — just like how modern job platforms operate.
 
-## 🔥 Features
+---
 
-- User authentication with JWT (Login/Register)
-- Recruiter dashboard to post/manage jobs
-- Candidate dashboard to view/apply to jobs
-- Real-time chat (Socket.IO) activated when recruiter selects a candidate's resume
-- Resume upload, job application tracking
-- Admin-level session control (single-session login, forced logout)
-- Frontend: React.js + Tailwind CSS
-- Backend: Node.js + Express.js + MongoDB
+## 🚀 Live Demo
 
-## ⚙️ Tech Stack
+🌐 [Frontend]()
+🌐 [Backend]()
 
-- **Frontend:** React.js, Tailwind CSS
-- **Backend:** Node.js, Express.js, MongoDB
-- **Authentication:** JWT (Access + Refresh Tokens)
-- **Real-time Communication:** Socket.IO
-- **File Uploads:** Multer + Cloudinary
-- **Version Control:** Git, GitHub
+---
 
-## 🚀 Setup Instructions
+## 🧠 Features
+
+* 👥 Role-based Authentication (Recruiter / Candidate)
+* 📄 Resume Upload & Management
+* 💼 Job Listings and Applications
+* ⚡ Real-Time Chat via Socket.IO
+* 🔐 JWT-based Authentication (Access & Refresh Tokens)
+* ☁️ Resume/Image Uploads via Multer + Cloudinary
+* 🎯 REST API Architecture
+* 🗃️ State Management with Redux Toolkit
+* 📱 Responsive UI with TailwindCSS
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer      | Technologies                             |
+| ---------- | ---------------------------------------- |
+| Frontend   | React, Redux Toolkit, Axios, TailwindCSS |
+| Backend    | Node.js, Express.js                      |
+| Database   | MongoDB with Mongoose                    |
+| Real-Time  | Socket.IO                                |
+| Uploads    | Multer, Cloudinary                       |
+| Auth       | JWT (Access + Refresh Tokens)            |
+| Deployment | Render / Vercel / Netlify                |
+
+---
+
+## 🔄 Real-Time Chat Flow
+
+1. Recruiter browses resumes.
+2. On selection, recruiter and candidate are connected in real-time using **WebSocket events**.
+3. Real-time chat is enabled.
+4. Messages are stored in MongoDB for future reference.
+
+---
+
+## 📁 Folder Structure
+
+```
+JobConnectX/
+├── FrontEnd/             # React Frontend
+│   ├── components/
+│   ├── pages/
+│   └── redux/
+└── BackEnd/             # Node + Express Backend
+    ├── routes/
+    ├── models/
+    ├── controllers/
+    └── socket/         # WebSocket logic (Socket.IO)
+```
+
+---
+
+## 📸 Screenshots
+
+> *(Add these for more visual appeal in interviews)*
+
+* Resume Listing UI
+* Recruiter Dashboard
+* Chat Window
+* User Profile Page
+
+---
+
+## 🛠️ Installation
+
+### 🔧 Frontend Setup
 
 ```bash
-# Clone the repo
-git clone https://github.com/your-username/jobhunt-portal.git
-cd jobhunt-portal
-
-# Install dependencies
-cd frontend && npm install
-cd ../backend && npm install
-
-# Create .env files in frontend and backend with your config
-
-# Run backend
-cd backend
-npm run start
-
-# Run frontend
-cd ../frontend
+cd FrontEnd
+npm install
 npm start
+```
+
+### 🔧 Backend Setup
+
+```bash
+cd BackEnd
+npm install
+npm start
+```
+
+📓 Create `.env` file in the `server/` folder with:
+
+* MONGO\_URI
+* JWT\_SECRET
+* CLOUDINARY\_CLOUD\_NAME / KEY / SECRET
+
+---
+
+## 🌟 Why This Project Stands Out in Interviews
+
+* ✅ Real-time communication with Socket.IO
+* ✅ Role-based access and JWT auth
+* ✅ Secure file handling (Multer + Cloudinary)
+* ✅ State management with Redux Toolkit
+* ✅ Clean code structure & modular design
+
+---
+
+## 📧 Contact
+
+👨‍💼 Built by **Sarvesh Deshpande**
+📌 System Engineer @ TCS | Full Stack Developer
+🔗 [LinkedIn](https://linkedin.com/in/your-profile)
+🔗 [GitHub](https://github.com/sarveshd92)
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
