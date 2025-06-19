@@ -43,7 +43,7 @@ const Createjobpage = () => {
 
         try {
             if(userdata_global?.data?.role==='Recruiter'){
-        const data = await axios.post('http://localhost:7777/api/v1/job/register', {
+        const data = await axios.post(`${localhost}/api/v1/job/register`, {
                 title,
                 description,
                 requirement,

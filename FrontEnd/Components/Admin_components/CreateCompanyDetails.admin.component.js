@@ -51,7 +51,7 @@ const CreateCompanyDetails = () => {
             dispatch(setloading(true));
             console.log("final ",companydetails.logo)
             const data = await axios.put(
-                `http://localhost:7777/api/v1/company/update/details/${compid}`,
+                `${localhost}/api/v1/company/update/details/${compid}`,
                 companydetails,
                 {
                     withCredentials: true,

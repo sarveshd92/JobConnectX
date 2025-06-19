@@ -9,7 +9,7 @@ const JobUserApplications = () => {
     const navigate=useNavigate();
     const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:7777/api/v1/job/getjobbyid/${jobid}`, {
+            const response = await axios.get(`${localhost}/api/v1/job/getjobbyid/${jobid}`, {
                 withCredentials: true,
             });
             setCompanies(response.data.result || []);
