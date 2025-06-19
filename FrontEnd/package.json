@@ -6,7 +6,7 @@
   "license": "ISC",
   "scripts": {
     "start": "parcel index.html",
-    "prod": "parcel build index.html"
+    "build": "parcel build index.html"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",

@@ -24,7 +24,9 @@ const CreateCompanyDetails = () => {
 
     const fetchdata = async () => {
         try {
-            const data = await axios.get(`${localhost}/api/v1/company/getcompany/${compid}`);
+            const data = await axios.get(`${localhost}/api/v1/company/getcompany/${compid}`,{
+                withCredentials: true,
+            });
             setcompanydetails(data?.data?.getcomapany);
         } catch (error) {
             console.log(error);
