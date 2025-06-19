@@ -9,7 +9,7 @@ import { localhost } from "../Utils/constant.js";
 // import { updateProfile } from "./profileSlice"; // Replace with your actual action
 
 const Profile = () => {
-    const fileinputref=useRef(null);
+    const fileinputref=useRef("");
     const skills1 = ["html", "css", "js"];
     const data = [
         { company: "ABC Corp", role: "Software Engineer", status: "Applied" },
