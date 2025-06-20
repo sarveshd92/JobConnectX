@@ -21,7 +21,17 @@ const SignUp = () => {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-
+if (
+  !fullname.current.value ||
+  !username.current.value ||
+  !email.current.value ||
+  !phoneno.current.value ||
+  !password.current.value ||
+  !file.current.files?.[0]
+) {
+  toast.error("Please fill all fields and upload resume.");
+  return;
+}
     const formData = new FormData();
     formData.append("fullname", fullname.current.value);
     formData.append("username", username.current.value);
@@ -59,7 +69,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto my-10 p-6 bg-white border border-gray-200 rounded-xl shadow-md">
+    <div className="w-full max-w-md mx-auto my-10 p-6 pt-[80px] min-h-screen bg-gray-100 bg-white border border-gray-200 rounded-xl shadow-md">
       <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800">
         Create Your Account
       </h1>
@@ -68,37 +78,37 @@ const SignUp = () => {
         <input
           type="text"
           placeholder="Full Name"
-          required
+           
           ref={fullname}
-          className="input-style"
+        className={inputStyle}
         />
         <input
           type="text"
           placeholder="Username"
-          required
+           
           ref={username}
-          className="input-style"
+      className={inputStyle}
         />
         <input
           type="email"
           placeholder="Email"
-          required
+           
           ref={email}
-          className="input-style"
+         className={inputStyle}
         />
         <input
           type="text"
           placeholder="Phone Number"
-          required
+           
           ref={phoneno}
-          className="input-style"
+         className={inputStyle}
         />
         <input
           type="password"
           placeholder="Password"
-          required
+           
           ref={password}
-          className="input-style"
+          className={inputStyle}
         />
 
         <div className="flex flex-col gap-2">
@@ -131,7 +141,7 @@ const SignUp = () => {
           </label>
           <input
             type="file"
-            required
+             
             ref={file}
             className="block w-full text-sm text-gray-700 border border-gray-300 rounded-md p-1.5 bg-gray-50"
           />

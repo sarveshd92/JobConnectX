@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Usealljobs from '../../Hooks/Usealljobs.hook.js';
 import axios from 'axios';
 import { localhost } from '../../Utils/constant.js';
+import { toast } from 'react-toastify';
 
 const AdminJobs = () => {
     const { jobs, loading, error } = Usealljobs();
@@ -34,6 +35,7 @@ const AdminJobs = () => {
             setFilteredJobs(response?.data?.result || []);
         } catch (error) {
             console.error("Error fetching filtered jobs:", error);
+            navigate('/admin/adminjobs')
         }
     };
 
@@ -49,7 +51,8 @@ const AdminJobs = () => {
                 navigate("/admin/adminjobs");
             }
         } catch (error) {
-            console.error("Error deleting job:", error);
+            toast.error('Error deleting job:')
+           navigate("/admin/adminjobs")
         }
     };
 
@@ -70,8 +73,8 @@ const AdminJobs = () => {
     }
 
     return (
-        <div className="p-6">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+        <div className="p-6 pt-[80px] min-h-screen bg-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-4 ">
                 <div className="w-full md:w-3/4 flex items-center">
                     <form className="flex items-center w-full">
                         <label htmlFor="search" className="sr-only">Search</label>

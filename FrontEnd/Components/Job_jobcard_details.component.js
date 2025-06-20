@@ -1,136 +1,146 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import applicationSlice, { addapplication } from "../Utils/Store/applicationSlice";
+import { addapplication } from "../Utils/Store/applicationSlice";
 import { localhost } from "../Utils/constant";
 
 const JobJobcardDetails = () => {
-
-
-  const dispatch=useDispatch()
-  const { jobid } = useParams();  // Ensure jobid matches your backend route
-  // console.log("Job ID:", jobid);
-// const{applications}=useSelector((store)=>store.applicationSlice)
+  const dispatch = useDispatch();
+  const { jobid } = useParams();
   const [jobDetails, setJobDetails] = useState(null);
   const [status, setStatus] = useState(false);
 
-  const fetchdata = async () => {
+  // Fetch Job + Status
+  const fetchJobData = async () => {
     try {
-      const data = await axios.get(
-        `${localhost}/api/v1/job/getjobbyidbyuser/${jobid}`,
-        { withCredentials: true }
-      );
+      const [jobRes, statusRes] = await Promise.all([
+        axios.get(`${localhost}/api/v1/job/getjobbyidbyuser/${jobid}`, {
+          withCredentials: true,
+        }),
+        axios.post(
+          `${localhost}/api/v1/job/appliedjobstatus`,
+          { jobid },
+          { withCredentials: true }
+        ),
+      ]);
 
-      const data1 = await axios.post(
-        `${localhost}/api/v1/job/appliedjobstatus`,
-        { jobid },
-        { withCredentials: true }
-      );
-      // console.log("data1->", data1?.data?.result?.application);
-      if (data1?.data?.result?.application.length>0) {
+      if (statusRes?.data?.result?.application?.length > 0) {
         setStatus(true);
-        const application = await axios.get(localhost+"/api/v1/application/appliedjobs", { withCredentials: true });
-        dispatch(addapplication(application.data.result));
+        const apps = await axios.get(`${localhost}/api/v1/application/appliedjobs`, {
+          withCredentials: true,
+        });
+        dispatch(addapplication(apps?.data?.result));
       } else {
         setStatus(false);
       }
-     
-      if (data?.data?.success) {
-        setJobDetails(data?.data?.result); // Store the job details
-        toast.success(data?.data?.message);
+
+      if (jobRes?.data?.success) {
+        setJobDetails(jobRes?.data?.result);
       } else {
-        toast.error(data?.data?.message);
+        toast.error("Job not found");
       }
     } catch (error) {
       toast.error("Session expired. Please log in again.");
     }
   };
-console.log("details of job ",jobDetails)
-  const handleClick = async (e) => {
-    e.preventDefault();
+
+  // Apply Handler
+  const handleApply = async () => {
     try {
-      console.log("Applying for job...");
       const result = await axios.post(
         `${localhost}/api/v1/application/applyjob/${jobid}`,
         {},
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, // Important for sending cookies
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
       );
-  
-      if (result.data.success) {
 
-           
-        setStatus(true); // Update the status after successful application
-        toast.success(result.data.message);
-      }else {
-        toast.error("Something Went Wrong please login again");
+      if (result.data.success) {
+        setStatus(true);
+        toast.success("Applied successfully");
+      } else {
+        toast.error("Something went wrong");
       }
     } catch (error) {
-      toast.error("Something Went Wrong please login again" );
+      toast.error("Application failed. Please log in.");
     }
   };
 
   useEffect(() => {
-    fetchdata();
-  }, [status]); // Empty dependency array to ensure this runs only once
-console.log(jobDetails?.company)
+    fetchJobData();
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
-      {jobDetails ? (
+      {!jobDetails ? (
+        <p className="text-center text-gray-500">Loading job details...</p>
+      ) : (
         <>
+          {/* Header: Title */}
           <h1 className="text-3xl font-bold mb-4">{jobDetails.title}</h1>
-          <div className="flex items-center mb-4">
-          <div>
-          <img className="w-8 h-8 rounded-md border-2 border-gray-200 object-contain " src= { `${jobDetails?.company?.logo}` }alt="Company Logo" />
-        </div>
+
+          {/* Company Info */}
+          <div className="flex items-center mb-4 gap-3">
+            <img
+              className="w-10 h-10 rounded border object-contain"
+              src={jobDetails?.company?.logo || "https://via.placeholder.com/40"}
+              alt="Company Logo"
+            />
             <div>
-              <h2 className="ml-2 text-xl font-semibold">{jobDetails?.company?.name}</h2>
-              <h3 className="ml-2 text-gray-600">{jobDetails.location}</h3>
+              <h2 className="text-lg font-semibold">{jobDetails?.company?.name}</h2>
+              <h3 className="text-gray-600">{jobDetails.location}</h3>
             </div>
           </div>
-          <p className="text-gray-600 mb-4">{jobDetails.description}</p>
+
+          {/* Description */}
+          <p className="text-gray-700 mb-4">{jobDetails.description}</p>
+
+          {/* Requirements */}
           <div className="mb-4">
             <h3 className="font-semibold">Requirements:</h3>
-            <ul className="list-disc list-inside ml-4">
+            <ul className="list-disc ml-5 text-gray-700 mt-1">
               {jobDetails.requirement.map((req, idx) => (
                 <li key={idx}>{req}</li>
               ))}
             </ul>
           </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Job Type:</h3>
-            <p>{jobDetails.jobType}</p>
+
+          {/* Job Meta Info */}
+          <div className="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
+            <div>
+              <strong>Job Type:</strong> {jobDetails.jobType}
+            </div>
+            <div>
+              <strong>Experience Required:</strong> {jobDetails.experience} years
+            </div>
+            <div>
+              <strong>Salary:</strong> {jobDetails.salary} LPA
+            </div>
+            <div>
+              <strong>Open Positions:</strong> {jobDetails.noofposition}
+            </div>
           </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Experience Required:</h3>
-            <p>{jobDetails.experience} years</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Salary:</h3>
-            <p>{jobDetails.salary} LPA</p>
-          </div>
-          <div className="mb-4">
-            <h3 className="font-semibold">Number of Positions:</h3>
-            <p>{jobDetails.noofposition}</p>
-          </div>
+
+          {/* Apply Button */}
           {!status ? (
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-md" onClick={handleClick}>
+            <button
+              onClick={handleApply}
+              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+            >
               Apply Now
             </button>
           ) : (
-            <button className="bg-green-600 text-white px-4 py-2 rounded-md"  disabled>
-              Applied
+            <button
+              disabled
+              className="bg-green-600 text-white px-6 py-2 rounded-md cursor-not-allowed"
+            >
+              Already Applied
             </button>
           )}
         </>
-      ) : (
-        <p>Loading job details...</p>
       )}
     </div>
   );

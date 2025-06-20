@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"
-import { application } from "../../BackEnd/models/Application.model";
-import { error } from "console";
+
 import use_user_info from "../Utils/use_user_info.utils.js";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +25,10 @@ const Login=()=>{
     const HandleSubmit=async(e)=>{
         e.preventDefault()
          const data={email,password,role};
-         
+         if (!email || !password || !role) {
+    toast.error("Please fill all fields and select a role.");
+    return;
+  }
 
          try {
          dispatch(setloading(true));
@@ -57,8 +59,7 @@ const Login=()=>{
                   theme: "light",
                   
                   });
-                // setuserdata(result.data);
-               // console.log("from login component", userdata);
+             
                 navigate("/Home");
               } else {
                 toast.error(result.data.message, {
@@ -76,15 +77,15 @@ const Login=()=>{
               }
             } catch (error) {
               toast.error(error.response ? error.response.data.message : error.message);
-            //  console.error(error.response ? error.response.data : error.message);
+      
             }
             finally{
               dispatch(setloading(false))
             }
     }
-//  useEffect(()=>(console.log("userdata updated")),[setuserdata])
+
   return (
-    <div className="w-full max-w-md mx-auto my-8 p-6 bg-white border border-gray-300 rounded-lg shadow-md">
+    <div className="w-full max-w-md mx-auto my-8 p-6 bg-white border border-gray-300 rounded-lg shadow-md pt-[80px] min-h-screen bg-gray-100">
       <h1 className="font-mono font-bold text-2xl mb-6 text-center text-gray-800">login</h1>
       <form className="flex flex-col space-y-5 " onSubmit={HandleSubmit}>
        
@@ -96,7 +97,7 @@ const Login=()=>{
             id="email" 
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" 
             placeholder="Sarvesh@gmail.com" 
-            required 
+            
             onChange={(e)=>(
                 setemail(e.target.value)
               
@@ -111,7 +112,7 @@ const Login=()=>{
             id="password" 
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" 
             placeholder="********" 
-            required 
+           
             onChange={(e)=>(
                 setpassword(e.target.value)
               
@@ -162,12 +163,13 @@ const Login=()=>{
       Loading...
     </button>
     : 
-    <button 
-      type="submit" 
-      className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
-    >
-      Log In
-    </button>
+   <button 
+  type="submit" 
+  className="transition-all duration-200 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center"
+>
+  Log In
+</button>
+
   }
 
         <p>Don't have an account ? <span className='text-blue-400'><Link to="/SignUp">Sign Up</Link></span></p>

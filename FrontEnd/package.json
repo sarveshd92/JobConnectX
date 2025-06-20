@@ -6,7 +6,9 @@
   "license": "ISC",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "dev": "parcel index.html",
+  "build": "parcel build index.html --dist-dir dist --public-url ./"
+
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
@@ -16,7 +18,7 @@
     "cors": "^2.8.5",
     "embla-carousel-react": "^8.1.8",
     "jsonwebtoken": "^9.0.2",
-
+    "lucide-react": "^0.518.0",
     "parcel": "^2.15.2",
     "postcss": "^8.4.40",
     "postcss-cli": "^11.0.0",

@@ -7,8 +7,6 @@ import { uploadOnCloudinary } from "../Util/cloudinary.util.js";
 export const register = async (req, res) => {
   try {
    
-   
-    
 
    const { fullname, username, email, password, phoneno, role,} = req.body;
 console.log(fullname, username, email, password, phoneno, role, req.file)
@@ -211,7 +209,7 @@ export const profileUpdate = async (req, res) => {
       profile.Profile.resume = resume_cloudinary.url;
     }
 
-    await profile.save();
+    await profile.save({validateBeforeSave:false});
 
     return res.status(200).json({
       message: "Profile updated successfully.",

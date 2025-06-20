@@ -33,7 +33,7 @@ const Createcompany=()=>{
          navigate(`/admin/create/companydetails/${result?.data?.result?._id}`)
          
          }
-         console.log("heyy")
+       
              console.log(company)
        } catch (error) {
         console.log(error)

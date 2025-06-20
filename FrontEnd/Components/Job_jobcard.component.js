@@ -1,50 +1,71 @@
 import { Link } from "react-router-dom";
 
 const Job_jobcard = ({ data }) => {
-  const daysago = (mongodbtime) => {
-    return Math.floor((new Date() - new Date(mongodbtime)) / (24 * 60 * 60 * 1000));
+  const daysAgo = (postedDate) => {
+    const diffTime = new Date() - new Date(postedDate);
+    const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return days === 0 ? "Today" : `${days} day${days > 1 ? "s" : ""} ago`;
   };
 
   return (
-    <div className="h-[auto] w-[300px] border-2 border-gray-200 shadow-md rounded-md p-2">
-      <div className="flex justify-between items-center mb-2">
-        <div className="text-gray-600 text-xs font-medium">
-          {daysago(data?.createdAt) === 0 ? "Today" : `${daysago(data?.createdAt)} Days ago`}
-        </div>
-        <div className="text-gray-600">
-          <img 
-            className="h-4 w-4 fill-current" 
-            src="https://path/to/your/image.png" 
-            alt="Icon" 
-          />
-        </div>
+    <div className="h-[360px] w-[300px] border border-gray-200 shadow hover:shadow-md rounded-xl p-4 flex flex-col justify-between transition duration-200 bg-white">
+      {/* Header */}
+      <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
+        <span>{daysAgo(data?.createdAt)}</span>
+        <img
+          className="h-4 w-4"
+          src="https://cdn-icons-png.flaticon.com/512/833/833472.png"
+          alt="bookmark"
+        />
       </div>
-      <div className="flex gap-2 items-center mb-2">
+
+      {/* Company Info */}
+      <div className="flex items-center gap-3 mb-2">
+        <img
+          className="w-8 h-8 rounded object-contain border border-gray-300"
+          src={data?.company?.logo || "https://via.placeholder.com/40"}
+          alt="Company Logo"
+        />
         <div>
-          <img className="w-8 h-8 rounded-md border-2 border-gray-200 object-contain" src= { `${data?.company?.logo}` }alt="Company Logo" />
-        </div>
-        <div className="flex flex-col items-start">
-          <h1 className="text-lg font-semibold">{data?.company?.name}</h1>
-          <h2 className="text-gray-400 text-sm">India</h2>
+          <h3 className="text-sm font-semibold truncate w-[200px]">
+            {data?.company?.name || "Unknown Company"}
+          </h3>
+          <p className="text-xs text-gray-500">{data?.location || "India"}</p>
         </div>
       </div>
-      <h3 className="mt-1 font-bold text-sm">{data?.title}</h3>
-      <p className="mt-1 text-gray-500 text-sm">
-        Design and maintain server-side logic and database management systems.
+
+      {/* Job Title */}
+      <h2 className="text-sm font-bold text-gray-900 mb-1 line-clamp-1">
+        {data?.title || "Untitled Position"}
+      </h2>
+
+      {/* Description */}
+      <p className="text-xs text-gray-600 line-clamp-2">
+        {data?.description || "No job description available."}
       </p>
-      <div className="flex justify-between my-2 text-xs">
-        <span className="text-blue-800 font-bold px-1 py-0.5 rounded">{data?.noofposition}</span>
-        <span className="text-red-600 font-bold px-1 py-0.5 rounded">{data?.jobType}</span>
-        <span className="text-[#683ac2] font-bold px-1 py-0.5 rounded">{data?.salary} LPA</span>
+
+      {/* Tags */}
+      <div className="flex justify-between mt-3 text-xs font-semibold">
+        <span className="bg-gray-100 text-blue-800 px-2 py-0.5 rounded">
+          {data?.noofposition || 0} Openings
+        </span>
+        <span className="bg-gray-100 text-red-500 px-2 py-0.5 rounded">
+          {data?.jobType || "N/A"}
+        </span>
+        <span className="bg-gray-100 text-purple-600 px-2 py-0.5 rounded">
+          {data?.salary ? `${data.salary} LPA` : "N/A"}
+        </span>
       </div>
-      <div className="flex justify-evenly mt-2">
+
+      {/* Actions */}
+      <div className="flex justify-between mt-4">
         <Link to={`/Details/${data?._id}`}>
-          <button type="button" className="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 rounded-lg text-xs px-4 py-1 font-semibold">
-            Details
+          <button className="text-sm border border-gray-300 px-3 py-1 rounded-lg hover:bg-gray-100 font-medium">
+            View Details
           </button>
         </Link>
-        <button type="button" className="bg-[#683ac2] border border-gray-300 hover:bg-[#683ac2] focus:ring-4 focus:ring-gray-100 rounded-lg text-xs px-4 py-1 font-semibold text-white">
-          Save for Later
+        <button className="text-sm bg-purple-600 text-white px-3 py-1 rounded-lg hover:bg-purple-700 font-medium">
+          Save
         </button>
       </div>
     </div>

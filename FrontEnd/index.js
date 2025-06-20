@@ -51,7 +51,7 @@ const MainContainer=()=>{
     height="96"
     width="96"
     strokeWidth="5"
-    animationDuration="0.75"
+    animationDuration="0.5"
     ariaLabel="rotating-lines-loading"
     wrapperClass="custom-loader"
   />
@@ -163,15 +163,13 @@ const root=ReactDom.createRoot(document.querySelector(".root"));
 
 const App=()=>{
 
-    // const [user,setuser]=useState("Guest");
-    // const[bio,setbio]=useState(" An enthusiastic learner eager to explore and innovate.");
-    // const[userdata,setuserdata]=useState("")
+ 
 
     return (
         <Provider store={appstore}>
         <div className="h-full w-full m-0 p-0 box-border">
             
- {/* <use_user_info.Provider value={{user,setuser,bio,setbio,userdata,setuserdata}} > */}
+
 
  <RouterProvider router={AppLayout}/>
 <ToastContainer

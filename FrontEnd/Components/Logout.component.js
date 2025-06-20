@@ -1,31 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import use_user_info from "../Utils/use_user_info.utils.js";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Oval } from 'react-loader-spinner';
 import { useDispatch, useSelector } from "react-redux";
-import {setuserdata_global,clearuserdata_global} from "../Utils/Store/userslice"
-import applicationSlice, {removeall, addapplication } from "../Utils/Store/applicationSlice";
+import { setuserdata_global, clearuserdata_global } from "../Utils/Store/userslice";
+import { removeall } from "../Utils/Store/applicationSlice";
 import { localhost } from "../Utils/constant";
 
-// import { removeall } from "../Utils/Store/applicationSlice"
-
 const Logout = () => {
-  // const { userdata, setuserdata, setuser, setbio } = useContext(use_user_info);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [logoutMessage, setLogoutMessage] = useState("");
-  const {userdata_global}=useSelector((store)=>store.userslice);
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const performLogout = async () => {
     try {
-    
-     
-
       const result = await axios.post(
-         localhost +"/api/v1/user/logout",
+        localhost + "/api/v1/user/logout",
         {},
         {
           headers: {
@@ -38,23 +30,29 @@ const Logout = () => {
       console.log("result->", result);
       if (result?.data?.success) {
         dispatch(clearuserdata_global());
-     
-        toast.success(result.data.message);
-        dispatch(removeall())
-        setLogoutMessage("Logout is successful!");
-       // setuserdata(null); // Using null for clarity
-        //setuser(null);
-        //setbio(null);
-        navigate("/login"); // Navigate immediately after success
+        dispatch(removeall());
+
+        toast.success(result.data.message, {
+          position: "bottom-right",
+        });
+
+        setLogoutMessage("Logout successful!");
+        navigate("/login");
       } else {
-        toast.error(result.data.message);
+        toast.error(result.data.message, {
+          position: "bottom-right",
+        });
+
         setLogoutMessage("Logout failed. Please try again.");
-        navigate("/login"); // Navigate immediately after failure
+        navigate("/login");
       }
     } catch (error) {
-      toast.error(error.message || "Logout failed");
+      toast.error(error.message || "Logout failed", {
+        position: "bottom-right",
+      });
+
       setLogoutMessage("Logout failed. Please try again.");
-      navigate("/login"); // Navigate immediately after error
+      navigate("/login");
     } finally {
       setLoading(false);
     }
@@ -62,17 +60,15 @@ const Logout = () => {
 
   useEffect(() => {
     performLogout();
-  }, []); // Empty dependency array ensures this runs only once
+  }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center justify-center h-screen pt-[80px] min-h-screen bg-gray-100">
       {loading ? (
         <Oval
           height={80}
           width={80}
           color="blue"
-          wrapperStyle={{}}
-          wrapperClass=""
           visible={true}
           ariaLabel="oval-loading"
           secondaryColor="lightblue"
