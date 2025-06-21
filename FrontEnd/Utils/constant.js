@@ -1,2 +1,3 @@
-export const localhost= "http://localhost:7777";                 
+export const localhost= "/api";
+               
 // /http://localhost:7777
