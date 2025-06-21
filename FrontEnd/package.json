@@ -5,7 +5,7 @@
   "author": "Sarvesh Deshpande",
   "license": "ISC",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel index.html --port 8080",
     "dev": "parcel index.html",
   "build": "parcel build index.html --dist-dir dist --public-url ./"
 

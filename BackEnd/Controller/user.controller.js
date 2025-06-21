@@ -128,7 +128,7 @@ console.log("creating and implementing token during login ",token)
       maxAge: 1 * 24 * 60 * 60 * 1000,
       httpOnly: true,
       sameSite: 'Strict',
-      secure: true,
+      secure: false,
     }).json({
       status: 200,
       message: "User logged in successfully",

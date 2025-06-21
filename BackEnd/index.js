@@ -29,6 +29,9 @@ const PORT = process.env.PORT||7777;
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(express.static("public"));
+app.use(cookieParser());
+
+app.set("trust proxy", 1);
 
 const CorsOption = {
   origin: ['http://localhost:1234'], // Allow only frontend origin
@@ -134,10 +137,13 @@ senderId= decode?.userid
 
 
 app.use(cors(CorsOption));
-app.use(cookieParser());
+
 
 
 // API SETUP
+app.get('/', (req, res) => {
+  res.send('Backend is running')
+})
 app.get("/welcome",(req,res)=>{
   return res.status(200).json({success:true,message:"welcome user"})
 })
