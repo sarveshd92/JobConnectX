@@ -6,8 +6,8 @@
 
 ## 🚀 Live Demo
 
-🌐 [Frontend]()
-🌐 [Backend]()
+🌐 [Frontend](http://56.228.33.21/home)
+
 
 ---
 
